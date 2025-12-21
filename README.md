@@ -105,7 +105,7 @@ python GRNewsAIv2.py
 python GRNewsAIv2.py 8
 ```
 
-παράλληλα εκτελώντας το script σε ένα synced cloud folder (Dropbox/iCloud/GoogleDrive) έχετε διαθέσιμο το δελτίο για αναπαραγωγή και σε mobile συσκευές.
+παράλληλα εκτελώντας το script σε ένα synced cloud folder (Dropbox/iCloud/GoogleDrive) έχετε διαθέσιμο το δελτίο για αναπαραγωγή και σε mobile συσκευές γισ ακρόσαη στο μετρό ή στο αυτοκίνητο.
 
 ---
 
