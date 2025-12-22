@@ -28,10 +28,12 @@ __status__ = "v2.0"
 
 
 # === CONFIGURABLE MODELS ===
-CLASSIFICATION_MODEL = 'gemma3:4b'
-BROADCAST_MODEL = 'ilsp/llama-krikri-8b-instruct:latest'
+# For Ollama use: 'gemma3:4b' and 'ilsp/llama-krikri-8b-instruct:latest'
+# For LMStudio use: 'google/gemma-3-4b' and 'llama-krikri-8b-instruct'
+CLASSIFICATION_MODEL = 'google/gemma-3-4b'
+BROADCAST_MODEL = 'llama-krikri-8b-instruct'
 TTS_VOICE = "el-GR-NestorasNeural" # Change to "el-GR-AthinaNeural" for female voice
-ENGINE = 'ollama' # Here it can be either "ollama" or "LMStudio"
+ENGINE = 'LMStudio' # Here it can be either "ollama" or "LMStudio"
 NUM_ARTICLES = 25 # Number of max articles to fetch from each RSS source
 NUM_STORIES = 7 # Number of stories to include in the final output
 # ===========================
@@ -135,19 +137,24 @@ def fetch_articles(feed_urls, max_articles):
 
 
 def similarity_check(summaries, model=CLASSIFICATION_MODEL):
-    print('Ομαδοποίηση άρθρων... παρακαλώ περιμένετε...')
     match = 0
     scores = {}
     similarity_group = []
     for item in summaries:
         if len(item['title'].split()) > 5:
             similarity_group.append([item['title']])
+
+    # Calculate initial estimate of total comparisons: n*(n-1)/2 unique pairs
+    n = len(similarity_group)
+    estimated_total = n * (n - 1) // 2
+
+    pbar = tqdm(total=estimated_total, desc="Ομαδοποίηση άρθρων (~εκτίμηση)", unit="συγκρίσεις")
+
     outer_pass = True
     while outer_pass == True:
         inner_pass = True
-        #for i in range(25): #range(len(similarity_group)):
         for i in range(len(similarity_group)):
-            if i == len(similarity_group)-1: 
+            if i == len(similarity_group)-1:
                 outer_pass = False
                 break
             if inner_pass == False: break
@@ -163,15 +170,17 @@ def similarity_check(summaries, model=CLASSIFICATION_MODEL):
                         if ENGINE == 'ollama':
                             response = ollama.chat(model=model, messages=[{"role": "user", "content": prompt}]) #, options = {"num_ctx": 2048})
                         if ENGINE == 'LMStudio':
-                            response = LMStudio.chat(model=model, messages=[{"role": "user", "content": prompt}])
+                            response = LMStudio_chat(model=model, messages=[{"role": "user", "content": prompt}])
                         grade = response['message']['content'][0]
                         scores[similarity_group[i][0]+similarity_group[j][0]] = grade
+                        pbar.update(1)
                         if grade == '9' or grade == 'Βαθμός: 9':
                             similarity_group[i].append(similarity_group[j][0])
                             similarity_group.remove(similarity_group[j])
                             inner_pass = False
                             match = match + 1
-                            print('.')
+
+    pbar.close()
 
 
     similarity_group.sort(key=len)
@@ -248,7 +257,7 @@ def generate_broadcast_new(grouped_articles, model=BROADCAST_MODEL):
         if ENGINE == 'ollama':
             response = ollama.chat(model=model, messages=[{"role": "user", "content": prompt}], options = {"num_ctx": 40960})
         if ENGINE == 'LMStudio':
-            response = LMStudio.chat(model=model, messages=[{"role": "user", "content": prompt}])
+            response = LMStudio_chat(model=model, messages=[{"role": "user", "content": prompt}])
 
         prompt = (
             "Δώσε μου ένα σύντομο τίτλο για το ακόλουθο κείμενο. Η απάντηση να περιέχει μόνο τον τίτλο.\n\n Κείμενο:"
@@ -259,7 +268,7 @@ def generate_broadcast_new(grouped_articles, model=BROADCAST_MODEL):
         if ENGINE == 'ollama':
             response_title = ollama.chat(model=model, messages=[{"role": "user", "content": prompt}], options = {"num_ctx": 40960})
         if ENGINE == 'LMStudio':
-            response_title = LMStudio.chat(model=model, messages=[{"role": "user", "content": prompt}])
+            response_title = LMStudio_chat(model=model, messages=[{"role": "user", "content": prompt}])
 
         total = total + response_title['message']['content'] + '\n\n' + response['message']['content'] + '\n --- \n'
         gen_titles.append(response_title['message']['content'])
