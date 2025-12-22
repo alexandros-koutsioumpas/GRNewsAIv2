@@ -29,7 +29,7 @@ Python3.9+ script το οποίο ανακτά άρθρα από RSS feed που
    ollama pull gemma3:4b
    ```
 
-   εναλλακτικά εγκατάσταση **LMStudio**, των μοντέλων `llama-krikri`/`gemma4b` και μεταβολή της μεταβλητής `ENGINE = 'LMStudio'`. (Merci [T. Kleisas](https://github.com/tkleisas)!)
+   εναλλακτικά εγκατάσταση **LMStudio**, των μοντέλων `llama-krikri`/`gemma4b` και μεταβολή της μεταβλητής `ENGINE = 'LMStudio'`. (Merci [T. Kleisas](https://github.com/tkleisas) & [Y. Mertzanis](https://github.com/imertz)!)
    
 5. Σε ορισμένους υπολογιστές χρειάζεται να "τρέξετε" το `Python Install Certificates script` (στο `MacOS` θα το βρείτε στο `Applications/Python/Install Certificates.command`)
 
