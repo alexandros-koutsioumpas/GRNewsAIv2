@@ -71,7 +71,7 @@ python GRNewsAIv2.py
 
 ## 🗣️ Ρυθμίσεις
 
-**Για τη ρύθμιση μοντέλου, μεταβλητή `SUMMARY_MODEL`**
+**Για τη ρύθμιση μοντέλου, μεταβλητή `BROADCAST_MODEL`**
 
 - `ilsp/llama-krikri-8b-instruct:latest` (default)
 
