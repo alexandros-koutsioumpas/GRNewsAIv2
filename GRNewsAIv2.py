@@ -16,7 +16,7 @@
 # then run the script
 
 __author__ = "Alexandros Koutsioumpas"
-__credits__ = "T. Kleisas"
+__credits__ = "T. Kleisas (initial LMStudio compatibility), Y. Mertzanis (grouping progress bar, LMStudio bug cleaning)"
 __license__ = "MIT"
 __date__ = "2025/12/20"
 __status__ = "v2.0"
@@ -28,7 +28,7 @@ __status__ = "v2.0"
 
 
 # === CONFIGURABLE SETTINGS ===
-ENGINE = 'LMStudio'  # "ollama" or "LMStudio"
+ENGINE = 'ollama'  # "ollama" or "LMStudio"
 
 # Auto-select models based on ENGINE
 if ENGINE == 'ollama':
