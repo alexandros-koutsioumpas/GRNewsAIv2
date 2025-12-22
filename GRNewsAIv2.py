@@ -27,15 +27,20 @@ __status__ = "v2.0"
 # version 2.0: Many updates. Now the script identifies the most covered news in the defined sources and creates a coherent summary in md,pdf,html and mp3
 
 
-# === CONFIGURABLE MODELS ===
-# For Ollama use: 'gemma3:4b' and 'ilsp/llama-krikri-8b-instruct:latest'
-# For LMStudio use: 'google/gemma-3-4b' and 'llama-krikri-8b-instruct'
-CLASSIFICATION_MODEL = 'google/gemma-3-4b'
-BROADCAST_MODEL = 'llama-krikri-8b-instruct'
-TTS_VOICE = "el-GR-NestorasNeural" # Change to "el-GR-AthinaNeural" for female voice
-ENGINE = 'LMStudio' # Here it can be either "ollama" or "LMStudio"
-NUM_ARTICLES = 25 # Number of max articles to fetch from each RSS source
-NUM_STORIES = 7 # Number of stories to include in the final output
+# === CONFIGURABLE SETTINGS ===
+ENGINE = 'LMStudio'  # "ollama" or "LMStudio"
+
+# Auto-select models based on ENGINE
+if ENGINE == 'ollama':
+    CLASSIFICATION_MODEL = 'gemma3:4b'
+    BROADCAST_MODEL = 'ilsp/llama-krikri-8b-instruct:latest'
+elif ENGINE == 'LMStudio':
+    CLASSIFICATION_MODEL = 'google/gemma-3-4b'
+    BROADCAST_MODEL = 'llama-krikri-8b-instruct'
+
+TTS_VOICE = "el-GR-NestorasNeural"  # Change to "el-GR-AthinaNeural" for female voice
+NUM_ARTICLES = 25  # Number of max articles to fetch from each RSS source
+NUM_STORIES = 7  # Number of stories to include in the final output
 # ===========================
 
 import os
